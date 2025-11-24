@@ -5,6 +5,7 @@ import { requireAdmin } from "../middlewares/auth.js";
 import { exportAttendanceExcel } from "../helpers/export/attendanceExport.js";
 import PDFDocument from "pdfkit";
 import { exportAttendancePDF } from "../helpers/export/attendancePDF.js";
+import fs from "fs";
 
 const attendanceRouter = express.Router();
 
@@ -222,13 +223,59 @@ attendanceRouter.get(
 /* -------------------------------------------  
    9) PDF Export
 --------------------------------------------*/
-attendanceRouter.get(
-  "/admin/attendance/export/pdf",
-  requireAdmin,
-  async (req, res) => {
-    const records = await Attendance.find().populate("student");
-    exportAttendancePDF(records, res);
-  }
-);
+attendanceRouter.get("/admin/attendance/export/pdf", requireAdmin, async (req, res) => {
+  const records = await Attendance.find().populate("student").sort({ date: -1 });
+
+  const doc = new PDFDocument({ margin: 40 });
+
+  // Türkçe font yükle
+  doc.registerFont("tr", "fonts/DejaVuSans.ttf");
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=yoklama.pdf");
+
+  doc.pipe(res);
+
+  // Başlık
+  doc.font("tr").fontSize(22).text("YOKLAMA DÖKÜMÜ", { align: "center" });
+  doc.moveDown();
+
+  doc.fontSize(12).text("Oluşturulma Tarihi: " + new Date().toLocaleDateString("tr-TR"), {
+    align: "center"
+  });
+  doc.moveDown(2);
+
+  // Tablo başlıkları
+  const top = doc.y;
+
+  doc.fontSize(13).font("tr").text("Öğrenci", 40, top);
+  doc.text("Branş", 200, top);
+  doc.text("Durum", 300, top);
+  doc.text("Tarih", 380, top);
+
+  // Çizgi
+  doc.moveTo(40, top + 18)
+     .lineTo(550, top + 18)
+     .stroke();
+
+  let y = top + 30;
+
+  records.forEach((r) => {
+    doc.font("tr").fontSize(12);
+    doc.text(r.student?.name || "-", 40, y);
+    doc.text(r.student?.branch || "-", 200, y);
+    doc.text(r.status === "var" ? "VAR" : "YOK", 300, y);
+    doc.text(new Date(r.date).toLocaleDateString("tr-TR"), 380, y);
+
+    y += 25;
+    if (y > 750) {
+      doc.addPage();
+      y = 40;
+    }
+  });
+
+  doc.end();
+});
+
 
 export default attendanceRouter;
