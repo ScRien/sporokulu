@@ -163,6 +163,4 @@ app.get("/", (req, res) => {
 // ===============================
 // SUNUCU
 // ===============================
-app.listen(PORT, () => {
-  console.log(`🚀 Sunucu çalışıyor: http://localhost:${PORT}`);
-});
+export default app;
