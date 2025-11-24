@@ -1,3 +1,6 @@
 .env
-*.zip
 node_modules
+logs/
+*.log
+*.zip
+.vercel
