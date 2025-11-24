@@ -1,0 +1,94 @@
+<h1 class="mb-4">Yeni Ödeme Ekle</h1>
+
+<div class="card">
+  <div class="card-header fw-bold">
+    Ödeme Bilgileri
+  </div>
+
+  <div class="card-body">
+
+    <form method="POST" action="/admin/payments">
+
+      <!-- Öğrenci -->
+      <div class="mb-3">
+        <label class="form-label">Öğrenci</label>
+        <select name="student" class="form-select" required>
+          <option value="">Öğrenci Seç...</option>
+
+          {{#each students}}
+            <option value="{{this._id}}"
+              {{#if (eq ../selectedStudent this._id)}}selected{{/if}}>
+              {{this.name}} | {{this.branch}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+
+      <!-- Tutar -->
+      <div class="mb-3">
+        <label class="form-label">Tutar (₺)</label>
+        <input
+          type="number"
+          name="amount"
+          class="form-control"
+          min="0"
+          step="1"
+          placeholder="Ödeme tutarı"
+          required
+        >
+      </div>
+
+      <!-- Ay / Yıl -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Ay</label>
+          <select name="month" class="form-select" required>
+            {{#each (range 1 12)}}
+              <option value="{{this}}"
+                {{#if (eq ../currentMonth this)}}selected{{/if}}>
+                {{monthName this}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Yıl</label>
+          <input
+            type="number"
+            name="year"
+            value="{{currentYear}}"
+            class="form-control"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Durum -->
+      <div class="mb-3">
+        <label class="form-label">Durum</label>
+        <select name="status" class="form-select" required>
+          <option value="bekliyor">Bekliyor</option>
+          <option value="ödendi">Ödendi</option>
+        </select>
+      </div>
+
+      <!-- Not -->
+      <div class="mb-3">
+        <label class="form-label">Not (Opsiyonel)</label>
+        <textarea
+          name="note"
+          class="form-control"
+          rows="3"
+          placeholder="Ödeme ile ilgili açıklama..."
+        ></textarea>
+      </div>
+
+      <!-- Gönder -->
+      <button class="btn btn-primary">Kaydet</button>
+      <a href="/admin/payments" class="btn btn-secondary ms-2">Geri Dön</a>
+
+    </form>
+
+  </div>
+</div>

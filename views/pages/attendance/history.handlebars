@@ -1,0 +1,96 @@
+<h1 class="mb-4">📊 Yoklama Geçmişi</h1>
+
+<form method="GET" class="row g-3 mb-4">
+
+  <div class="col-md-3">
+    <label class="form-label">Başlangıç Tarihi</label>
+    <input type="date" class="form-control" name="start" value="{{start}}">
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Bitiş Tarihi</label>
+    <input type="date" class="form-control" name="end" value="{{end}}">
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Branş</label>
+    <select name="branch" class="form-select">
+      <option value="all">Tümü</option>
+      <option value="Futbol" {{#if (eq selectedBranch "Futbol")}}selected{{/if}}>Futbol</option>
+      <option value="Basketbol" {{#if (eq selectedBranch "Basketbol")}}selected{{/if}}>Basketbol</option>
+      <option value="Voleybol" {{#if (eq selectedBranch "Voleybol")}}selected{{/if}}>Voleybol</option>
+      <option value="Yüzme" {{#if (eq selectedBranch "Yüzme")}}selected{{/if}}>Yüzme</option>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Öğrenci</label>
+    <select name="student" class="form-select">
+      <option value="all">Tümü</option>
+      {{#each students}}
+        <option value="{{this._id}}" {{#if (eq ../selectedStudent this._id)}}selected{{/if}}>
+          {{this.name}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="col-md-12 text-end mt-3">
+    <button class="btn btn-primary">Filtrele</button>
+  </div>
+
+</form>
+
+<h3 class="mt-4">📊 Yoklama Dağılımı</h3>
+<canvas id="attendanceChart" class="mt-3" height="120"></canvas>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Öğrenci</th>
+      <th>Branş</th>
+      <th>Tarih</th>
+      <th>Durum</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each attendance}}
+      <tr>
+        <td>{{this.student.name}}</td>
+        <td>{{this.student.branch}}</td>
+        <td>{{formatDate this.date}}</td>
+        <td>
+          {{#if (eq this.status "var")}}
+            <span class="badge bg-success">VAR</span>
+          {{else}}
+            <span class="badge bg-danger">YOK</span>
+          {{/if}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById("attendanceChart");
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["VAR", "YOK"],
+      datasets: [{
+        data: [{{totalPresent}}, {{totalAbsent}}],
+        backgroundColor: ["#28a745", "#dc3545"]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom" }
+      }
+    }
+  });
+</script>

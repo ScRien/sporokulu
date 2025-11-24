@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+
+    <a class="navbar-brand fw-bold" href="/admin">
+      🏫 Spor Okulu Paneli
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq active 'dashboard')}}active{{/if}}" href="/admin">
+            📊 Dashboard
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq active 'students')}}active{{/if}}" href="/admin/students">
+            👥 Öğrenciler
+          </a>
+        </li>
+
+        <!-- Ödemeler -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {{#if (eq active 'payments')}}active{{/if}}" href="#" data-bs-toggle="dropdown">
+            💳 Ödemeler
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/admin/payments/dashboard">📊 Ödemeler Paneli</a></li>
+            <li><a class="dropdown-item" href="/admin/payments">📄 Tüm Ödemeler</a></li>
+            <li><a class="dropdown-item" href="/admin/payments/new">➕ Yeni Ödeme</a></li>
+            <li><a class="dropdown-item" href="/admin/payments/monthly">📆 Aylık Ödemeler</a></li>
+            <li><a class="dropdown-item" href="/admin/payments/pending">🟡 Bekleyen Ödemeler</a></li>
+            <li><a class="dropdown-item" href="/admin/payments/paid">🟢 Ödenmiş Ödemeler</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/admin/payments/export/excel">📥 Tüm Ödemeler Excel</a></li>
+          </ul>
+        </li>
+
+        <!-- Yoklama -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {{#if (eq active 'attendance')}}active{{/if}}" href="#" data-bs-toggle="dropdown">
+            ✔ Yoklama
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/admin/attendance">📅 Günlük Yoklama</a></li>
+            <li><a class="dropdown-item" href="/admin/attendance/bulk">📦 Toplu Yoklama</a></li>
+            <li><a class="dropdown-item" href="/admin/attendance/history">📊 Yoklama Geçmişi</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/admin/attendance/export/excel">📥 Excel İndir</a></li>
+            <li><a class="dropdown-item" href="/admin/attendance/export/pdf">📄 PDF İndir</a></li>
+          </ul>
+        </li>
+
+        <!-- Makbuzlar -->
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq active 'receipts')}}active{{/if}}" href="/admin/receipts">
+            📄 Makbuzlar
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq active 'data')}}active{{/if}}" href="/admin/data">
+            📦 Veri Yönetimi
+          </a>
+        </li>
+
+        <!-- Ayarlar -->
+        <li class="nav-item">
+          <a class="nav-link {{#if (eq active 'settings')}}active{{/if}}" href="/admin/settings">
+            ⚙ Ayarlar
+          </a>
+        </li>
+
+      </ul>
+
+      <ul class="navbar-nav">
+        {{#if user}}
+          <li class="nav-item">
+            <span class="navbar-text me-3">👤 {{user.username}}</span>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm" href="/logout">Çıkış</a>
+          </li>
+        {{else}}
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm" href="/login">Giriş Yap</a>
+          </li>
+        {{/if}}
+      </ul>
+
+    </div>
+
+  </div>
+</nav>

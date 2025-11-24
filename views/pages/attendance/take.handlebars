@@ -1,0 +1,29 @@
+<h1 class="mb-4">Günlük Yoklama</h1>
+
+<form method="POST" action="/admin/attendance">
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Öğrenci</th>
+        <th>Durum</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each students}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>
+          <select name="attendance[{{this._id}}]" class="form-select">
+            <option value="var">Var</option>
+            <option value="yok">Yok</option>
+          </select>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <button class="btn btn-primary w-100">Kaydet</button>
+</form>

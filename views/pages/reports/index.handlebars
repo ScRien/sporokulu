@@ -1,0 +1,72 @@
+<h1 class="mb-4">Gelir Raporları</h1>
+
+<!-- === FİLTRELER === -->
+<form method="GET" class="card p-3 mb-4">
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <label class="form-label">Yıl</label>
+      <input type="number" name="year" class="form-control" value="{{year}}" />
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Ay</label>
+      <select name="month" class="form-select">
+        <option value="">Tümü</option>
+        {{#each (array 1 12)}}
+          <option value="{{this}}" {{#if (eq ../month this)}}selected{{/if}}>
+            {{this}}. Ay
+          </option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn btn-primary w-100">Filtrele</button>
+    </div>
+
+  </div>
+</form>
+
+<!-- === ÖZET TABLO === -->
+<div class="card mb-4">
+  <div class="card-header"><strong>Özet Bilgiler</strong></div>
+  <div class="card-body">
+
+    <p><strong>Toplam Ödenen:</strong> {{totalPaid}} ₺</p>
+    <p><strong>Bekleyen Ödeme:</strong> {{totalPending}} ₺</p>
+    <p><strong>Ödeme Yapan Öğrenci Sayısı:</strong> {{totalStudentsPaid}}</p>
+
+  </div>
+</div>
+
+<!-- === BRANŞ BAZLI GELİR GRAFİĞİ === -->
+<div class="card mb-4">
+  <div class="card-header"><strong>Branş Bazlı Gelir</strong></div>
+  <div class="card-body">
+    <canvas id="branchChart" height="120"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const branchData = {{{branchTotals}}};
+
+  const ctx2 = document.getElementById("branchChart").getContext("2d");
+
+  new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: Object.keys(branchData),
+      datasets: [{
+        label: "Gelir (₺)",
+        data: Object.values(branchData),
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 2
+      }]
+    }
+  });
+</script>

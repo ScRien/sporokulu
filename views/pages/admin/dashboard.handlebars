@@ -1,0 +1,255 @@
+<h1 class="mb-4">Yönetim Paneli</h1>
+
+<div class="row mb-4">
+
+  <!-- Toplam Öğrenci -->
+  <div class="col-md-3 mb-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Toplam Öğrenci</h5>
+        <h2 class="mb-0">{{totalStudents}}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aktif Öğrenci -->
+  <div class="col-md-3 mb-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Aktif Öğrenci</h5>
+        <h2 class="mb-0">{{activeStudents}}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bu Ay Tahsil Edilen -->
+  <div class="col-md-3 mb-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Bu Ay Tahsil Edilen</h5>
+        <h2 class="mb-0">{{totalPaidThisMonth}} ₺</h2>
+        <small>{{currentMonth}} / {{currentYear}}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bu Ay Bekleyen -->
+  <div class="col-md-3 mb-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Bu Ay Bekleyen</h5>
+        <h2 class="mb-0 text-warning">{{totalPendingThisMonth}} ₺</h2>
+        <small>{{currentMonth}} / {{currentYear}}</small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row mb-4">
+
+  <!-- Branşa Göre Öğrenci Dağılımı -->
+  <div class="col-md-6 mb-3">
+    <div class="card">
+      <div class="card-header fw-bold">
+        Branşa Göre Öğrenci Dağılımı
+      </div>
+      <div class="card-body">
+        <canvas id="branchChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aylık Tahsilat Grafiği -->
+  <div class="col-md-6 mb-3">
+    <div class="card">
+      <div class="card-header fw-bold">
+        Aylık Tahsilat
+      </div>
+      <div class="card-body">
+        <canvas id="monthlyPaymentsChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row mb-4">
+
+  <!-- Yoklama Özeti -->
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-header fw-bold">
+        Yoklama Özeti
+      </div>
+      <div class="card-body text-center">
+        <p><strong>Toplam VAR:</strong> {{totalPresent}}</p>
+        <p><strong>Toplam YOK:</strong> {{totalAbsent}}</p>
+        <canvas id="attendanceChart" height="140"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Son Ödemeler -->
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-header fw-bold">
+        Son Ödemeler
+      </div>
+      <div class="card-body p-0">
+        <table class="table mb-0 table-sm">
+          <thead>
+            <tr>
+              <th>Öğrenci</th>
+              <th>Miktar</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each latestPayments}}
+              <tr>
+                <td>{{this.student.name}}</td>
+                <td>{{this.amount}} ₺</td>
+                <td>
+                  {{#if (eq this.status "ödendi")}}
+                    <span class="badge bg-success">Ödendi</span>
+                  {{else}}
+                    <span class="badge bg-warning text-dark">Bekliyor</span>
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Son Yoklamalar -->
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-header fw-bold">
+        Son Yoklamalar
+      </div>
+      <div class="card-body p-0">
+        <table class="table mb-0 table-sm">
+          <thead>
+            <tr>
+              <th>Öğrenci</th>
+              <th>Tarih</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each latestAttendance}}
+              <tr>
+                <td>{{this.student.name}}</td>
+                <td>{{formatDate this.date}}</td>
+                <td>
+                  {{#if (eq this.status "var")}}
+                    <span class="text-success fw-bold">VAR</span>
+                  {{else}}
+                    <span class="text-danger fw-bold">YOK</span>
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Branş Grafiği
+  (function () {
+    const ctx = document.getElementById("branchChart");
+    const labels = {{{branchLabelsJson}}};
+    const values = {{{branchValuesJson}}};
+
+    if (labels.length) {
+      new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: ["#0d6efd", "#198754", "#ffc107", "#dc3545", "#6f42c1"]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "bottom" }
+          }
+        }
+      });
+    } else {
+      ctx.parentNode.innerHTML = "<p>Henüz öğrenci verisi bulunmuyor.</p>";
+    }
+  })();
+
+  // Aylık Tahsilat Grafiği
+  (function () {
+    const ctx = document.getElementById("monthlyPaymentsChart");
+    const labels = {{{monthlyLabelsJson}}};
+    const values = {{{monthlyValuesJson}}};
+
+    if (labels.length) {
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Tahsil Edilen (₺)",
+            data: values,
+            backgroundColor: "#0d6efd"
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    } else {
+      ctx.parentNode.innerHTML = "<p>Henüz ödeme verisi bulunmuyor.</p>";
+    }
+  })();
+
+  // Yoklama Grafiği
+  (function () {
+    const ctx = document.getElementById("attendanceChart");
+    const present = {{totalPresent}};
+    const absent = {{totalAbsent}};
+
+    if (present + absent > 0) {
+      new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["VAR", "YOK"],
+          datasets: [{
+            data: [present, absent],
+            backgroundColor: ["#198754", "#dc3545"]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "bottom" }
+          }
+        }
+      });
+    } else {
+      ctx.parentNode.innerHTML = "<p>Henüz yoklama verisi bulunmuyor.</p>";
+    }
+  })();
+</script>

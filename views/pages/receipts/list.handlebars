@@ -1,0 +1,104 @@
+<h1 class="mb-4">📄 Makbuz Yönetimi</h1>
+
+<form method="GET" class="row g-3 mb-4">
+
+  <div class="col-md-2">
+    <label class="form-label">Ay</label>
+    <select name="month" class="form-select">
+      <option value="">Tümü</option>
+      {{#each (range 1 12)}}
+        <option value="{{this}}" {{#if (eq ../month this)}}selected{{/if}}>
+          {{monthName this}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">Yıl</label>
+    <input type="number" name="year" class="form-control" value="{{year}}" />
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Öğrenci</label>
+    <select name="student" class="form-select">
+      <option value="all">Tümü</option>
+      {{#each students}}
+        <option value="{{this._id}}" {{#if (eq ../selectedStudent this._id)}}selected{{/if}}>
+          {{this.name}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">Durum</label>
+    <select name="status" class="form-select">
+      <option value="all">Tümü</option>
+      <option value="ödendi" {{#if (eq selectedStatus "ödendi")}}selected{{/if}}>Ödendi</option>
+      <option value="bekliyor" {{#if (eq selectedStatus "bekliyor")}}selected{{/if}}>Bekliyor</option>
+    </select>
+  </div>
+
+    <div class="col-md-3">
+    <label class="form-label">Makbuz No</label>
+    <input
+        type="text"
+        name="receipt"
+        class="form-control"
+        placeholder="Örn: R-2025-0012"
+        value="{{receipt}}"
+    />
+    </div>
+
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary">Filtrele</button>
+  </div>
+
+</form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Makbuz No</th>
+      <th>Öğrenci</th>
+      <th>Ay/Yıl</th>
+      <th>Tutar</th>
+      <th>Durum</th>
+      <th>Makbuz</th>
+      <th>Detay</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each payments}}
+      <tr>
+        <td>{{this.receiptNumber}}</td>
+        <td>{{this.student.name}}</td>
+        <td>{{this.month}} / {{this.year}}</td>
+        <td>{{this.amount}} ₺</td>
+
+        <td>
+          {{#if (eq this.status "ödendi")}}
+            <span class="badge bg-success">Ödendi</span>
+          {{else}}
+            <span class="badge bg-warning text-dark">Bekliyor</span>
+          {{/if}}
+        </td>
+
+        <td>
+          {{#if this.receiptFile}}
+            <a href="/receipts/{{this.receiptFile}}" target="_blank">📄 PDF</a>
+          {{else}} - {{/if}}
+        </td>
+
+        <td>
+          <a class="btn btn-sm btn-info" href="/admin/payments/{{this._id}}">
+            Detay
+          </a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+
+</table>

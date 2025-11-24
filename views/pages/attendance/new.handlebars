@@ -1,0 +1,23 @@
+<h1 class="mb-4">Tek Öğrenci Yoklaması</h1>
+
+<form method="POST" action="/admin/attendance/new">
+
+  <div class="mb-3">
+    <label class="form-label">Öğrenci</label>
+    <select name="student" class="form-select" required>
+      {{#each students}}
+      <option value="{{this._id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Durum</label>
+    <select name="status" class="form-select">
+      <option value="var">Var</option>
+      <option value="yok">Yok</option>
+    </select>
+  </div>
+
+  <button class="btn btn-success w-100">Kaydet</button>
+</form>

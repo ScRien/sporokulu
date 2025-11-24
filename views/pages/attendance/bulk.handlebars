@@ -1,0 +1,39 @@
+<h1 class="mb-4">Toplu Yoklama</h1>
+
+<form method="GET" action="/admin/attendance/bulk" class="mb-3">
+  <label class="form-label">Branş Filtrele</label>
+  <select name="branch" class="form-select" onchange="this.form.submit()">
+    <option value="">Tümü</option>
+    {{#each branches}}
+      <option value="{{this}}" {{#if (eq ../selectedBranch this)}}selected{{/if}}>{{this}}</option>
+    {{/each}}
+  </select>
+</form>
+
+<form method="POST" action="/admin/attendance/bulk">
+
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Öğrenci</th>
+        <th>Durum</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each students}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>
+          <select name="attendance[{{this._id}}]" class="form-select">
+            <option value="var">Var</option>
+            <option value="yok">Yok</option>
+          </select>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <button class="btn btn-success w-100">Toplu Kaydet</button>
+</form>

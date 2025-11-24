@@ -1,0 +1,72 @@
+<h1 class="mb-4">📆 Aylık Ödemeler</h1>
+
+<form method="GET" class="row g-3 mb-4">
+
+  <!-- AY -->
+  <div class="col-md-2">
+    <label class="form-label">Ay</label>
+    <select name="month" class="form-select">
+      {{#each (range 1 12)}}
+        <option value="{{this}}"
+          {{#if (eq this ../month)}} selected {{/if}}>
+          {{monthName this}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+
+  <!-- YIL -->
+  <div class="col-md-2">
+    <label class="form-label">Yıl</label>
+    <input
+      type="number"
+      name="year"
+      class="form-control"
+      value="{{year}}"
+    />
+  </div>
+
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary">Filtrele</button>
+  </div>
+
+</form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Öğrenci</th>
+      <th>Miktar</th>
+      <th>Durum</th>
+      <th>Not</th>
+      <th>Makbuz</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each payments}}
+      <tr>
+        <td>{{this.student.name}}</td>
+        <td>{{this.amount}} ₺</td>
+
+        <td>
+          {{#if (eq this.status "ödendi")}}
+            <span class="badge bg-success">Ödendi</span>
+          {{else}}
+            <span class="badge bg-warning text-dark">Bekliyor</span>
+          {{/if}}
+        </td>
+
+        <td>{{this.note}}</td>
+
+        <td>
+          {{#if this.receiptFile}}
+            <a href="/receipts/{{this.receiptFile}}" target="_blank">📄 PDF</a>
+          {{else}}
+            -
+          {{/if}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

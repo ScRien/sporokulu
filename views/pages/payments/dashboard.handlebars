@@ -1,0 +1,77 @@
+<h1 class="mb-4">💳 Ödeme Paneli</h1>
+
+<div class="row">
+  
+  <div class="col-md-3">
+    <div class="card text-bg-success mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Bu Ay Tahsilat</h5>
+        <p class="card-text fs-3">{{totalPaid}} ₺</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-warning mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Bekleyen</h5>
+        <p class="card-text fs-3">{{totalPending}} ₺</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-primary mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Ödenen Sayısı</h5>
+        <p class="card-text fs-3">{{paidCount}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-bg-danger mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Bekleyen Sayı</h5>
+        <p class="card-text fs-3">{{pendingCount}}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<h4 class="mt-4">📈 Aylık Tahsilat Grafiği</h4>
+<canvas id="paymentsChart" height="120"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById("paymentsChart");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: {{{json monthlyLabels}}},
+      datasets: [{
+        label: "Tahsilat",
+        data: {{{json monthlyValues}}},
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+</script>
+
+<hr>
+
+<h4 class="mt-4">🔄 Hızlı İşlemler</h4>
+
+<div class="d-flex gap-3 mb-4">
+  <a href="/admin/payments/new" class="btn btn-success">+ Ödeme Ekle</a>
+  <a href="/admin/payments/pending" class="btn btn-warning">Bekleyen Ödemeler</a>
+  <a href="/admin/payments/monthly" class="btn btn-primary">Aylık Ödemeler</a>
+  <a href="/admin/students" class="btn btn-dark">Öğrencilere Git</a>
+</div>

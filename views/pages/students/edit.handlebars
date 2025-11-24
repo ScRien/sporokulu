@@ -1,0 +1,140 @@
+<h1 class="mb-4">{{student.name}} – Düzenle</h1>
+
+{{#if error}}
+<div class="alert alert-danger">{{error}}</div>
+{{/if}}
+
+<form method="POST" action="/admin/students/{{student._id}}">
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Temel Bilgiler</h5>
+
+      <div class="mb-3">
+        <label class="form-label">Ad Soyad</label>
+        <input type="text" name="name" value="{{student.name}}" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Yaş</label>
+        <input type="number" name="age" value="{{student.age}}" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Cinsiyet</label>
+        <select name="gender" class="form-select">
+          <option value="Erkek" {{#if (eq student.gender "Erkek")}}selected{{/if}}>Erkek</option>
+          <option value="Kız" {{#if (eq student.gender "Kız")}}selected{{/if}}>Kız</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Doğum Tarihi</label>
+        <input type="date" name="birthDate" value="{{student.birthDate}}" class="form-control" />
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <h5>İletişim</h5>
+
+      <div class="mb-3">
+        <label class="form-label">Telefon</label>
+        <input type="text" name="phone" value="{{student.phone}}" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Adres</label>
+        <input type="text" name="address" value="{{student.address}}" class="form-control" />
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">İl</label>
+          <input type="text" name="city" value="{{student.city}}" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">İlçe</label>
+          <input type="text" name="district" value="{{student.district}}" class="form-control" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <h5>Veli Bilgileri</h5>
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <h6>Anne</h6>
+      <input type="text" name="mother.name" value="{{student.mother.name}}" class="form-control mb-2" />
+      <input type="text" name="mother.phone" value="{{student.mother.phone}}" class="form-control mb-2" />
+      <input type="email" name="mother.email" value="{{student.mother.email}}" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+      <h6>Baba</h6>
+      <input type="text" name="father.name" value="{{student.father.name}}" class="form-control mb-2" />
+      <input type="text" name="father.phone" value="{{student.father.phone}}" class="form-control mb-2" />
+      <input type="email" name="father.email" value="{{student.father.email}}" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+      <h6>İkincil Veli</h6>
+      <input type="text" name="guardian.name" value="{{student.guardian.name}}" class="form-control mb-2" />
+      <input type="text" name="guardian.phone" value="{{student.guardian.phone}}" class="form-control mb-2" />
+      <input type="text" name="guardian.relation" value="{{student.guardian.relation}}" class="form-control" />
+    </div>
+
+  </div>
+
+  <hr>
+
+  <h5>Spor Bilgileri</h5>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Branş</label>
+      <select name="branch" class="form-select">
+        <option value="Futbol" {{#if (eq student.branch "Futbol")}}selected{{/if}}>Futbol</option>
+        <option value="Basketbol" {{#if (eq student.branch "Basketbol")}}selected{{/if}}>Basketbol</option>
+        <option value="Yüzme" {{#if (eq student.branch "Yüzme")}}selected{{/if}}>Yüzme</option>
+        <option value="Voleybol" {{#if (eq student.branch "Voleybol")}}selected{{/if}}>Voleybol</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Seviye</label>
+      <select name="level" class="form-select">
+        <option value="Başlangıç" {{#if (eq student.level "Başlangıç")}}selected{{/if}}>Başlangıç</option>
+        <option value="Orta" {{#if (eq student.level "Orta")}}selected{{/if}}>Orta</option>
+        <option value="İleri" {{#if (eq student.level "İleri")}}selected{{/if}}>İleri</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Durum</label>
+      <select name="status" class="form-select">
+        <option value="aktif" {{#if (eq student.status "aktif")}}selected{{/if}}>Aktif</option>
+        <option value="pasif" {{#if (eq student.status "pasif")}}selected{{/if}}>Pasif</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Aylık Ücret</label>
+    <input type="number" name="monthlyFee" value="{{student.monthlyFee}}" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notlar</label>
+    <textarea name="notes" class="form-control">{{student.notes}}</textarea>
+  </div>
+
+  <button class="btn btn-primary w-100">Güncelle</button>
+
+</form>

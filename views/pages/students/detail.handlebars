@@ -1,0 +1,243 @@
+<h1 class="mb-4">{{student.name}}</h1>
+
+<div class="row">
+
+  <!-- SOL TARAF -->
+  <div class="col-md-4">
+
+    <!-- Temel Bilgiler -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">Temel Bilgiler</div>
+      <div class="card-body">
+        <p><strong>Yaş:</strong> {{student.age}}</p>
+        <p><strong>Cinsiyet:</strong> {{student.gender}}</p>
+        <p><strong>Doğum Tarihi:</strong> {{formatDate student.birthDate}}</p>
+        <p><strong>Kayıt Tarihi:</strong> {{formatDate student.startDate}}</p>
+
+        <p>
+          <strong>Durum:</strong>
+          {{#if (eq student.status "aktif")}}
+            <span class="badge bg-success">Aktif</span>
+          {{else}}
+            <span class="badge bg-secondary">Pasif</span>
+          {{/if}}
+        </p>
+      </div>
+    </div>
+
+    <!-- AYLIK ÖDEME DURUMU -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>Bu Ayın Ödemesi ({{currentMonth}} / {{currentYear}})</strong></div>
+      <div class="card-body">
+
+        {{#if currentMonthPayment}}
+
+          <p><strong>Tutar:</strong> {{currentMonthPayment.amount}} ₺</p>
+
+          <p>
+            <strong>Durum:</strong>
+            {{#if (eq currentMonthPayment.status "ödendi")}}
+              <span class="badge bg-success">Ödendi</span>
+            {{else}}
+              <span class="badge bg-warning text-dark">Bekliyor</span>
+            {{/if}}
+          </p>
+
+          <p><strong>Not:</strong> {{currentMonthPayment.note}}</p>
+
+          {{#if currentMonthPayment.receiptFile}}
+            <p>
+              <strong>Makbuz:</strong>
+              <a href="/receipts/{{currentMonthPayment.receiptFile}}" target="_blank">PDF İndir</a>
+            </p>
+          {{/if}}
+
+        {{else}}
+          <p>Bu ay için henüz ödeme oluşturulmamış.</p>
+        {{/if}}
+
+        <hr>
+
+        <!-- Hızlı Ödeme İşlemleri -->
+        <div class="d-flex gap-3">
+
+          <a href="/admin/payments/new?student={{student._id}}" class="btn btn-primary">
+            + Ödeme Yap
+          </a>
+
+          <form method="POST" action="/admin/payments/mark-paid" class="d-inline">
+            <input type="hidden" name="studentId" value="{{student._id}}">
+            <input type="hidden" name="month" value="{{currentMonth}}">
+            <input type="hidden" name="year" value="{{currentYear}}">
+            <button class="btn btn-success" {{#if (eq currentMonthPayment.status "ödendi")}}disabled{{/if}}>
+              ✔ Bu Ayı Ödenmiş İşaretle
+            </button>
+          </form>
+
+        </div>
+        <br>
+        <form method="POST" action="/admin/students/{{student._id}}/regenerate-receipts">
+            <button class="btn btn-warning">🔄 Bu Öğrencinin Makbuzlarını Yenile</button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- İletişim -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">İletişim</div>
+      <div class="card-body">
+        <p><strong>Telefon:</strong> {{student.phone}}</p>
+        <p><strong>Adres:</strong> {{student.address}}</p>
+        <p><strong>İl / İlçe:</strong> {{student.city}} / {{student.district}}</p>
+      </div>
+    </div>
+
+    <!-- Veli Bilgileri -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">Veli Bilgileri</div>
+      <div class="card-body">
+
+        <h6 class="fw-bold">Anne</h6>
+        <p>{{student.mother.name}}<br>{{student.mother.phone}}<br>{{student.mother.email}}</p>
+
+        <h6 class="fw-bold mt-3">Baba</h6>
+        <p>{{student.father.name}}<br>{{student.father.phone}}<br>{{student.father.email}}</p>
+
+        <h6 class="fw-bold mt-3">İkincil Veli</h6>
+        <p>{{student.guardian.name}}<br>{{student.guardian.phone}}<br>{{student.guardian.relation}}</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SAĞ TARAF -->
+  <div class="col-md-8">
+
+    <!-- Spor Bilgileri -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">Spor Bilgileri</div>
+      <div class="card-body">
+        <p><strong>Branş:</strong> {{student.branch}}</p>
+        <p><strong>Seviye:</strong> {{student.level}}</p>
+        <p><strong>Aylık Ücret:</strong> {{student.monthlyFee}} ₺</p>
+        <p><strong>Notlar:</strong> {{student.notes}}</p>
+      </div>
+    </div>
+
+    <!-- Ödeme Geçmişi -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">Ödeme Geçmişi</div>
+      <div class="card-body">
+
+        <p><strong>Toplam Ödenen:</strong> {{totalPaid}} ₺</p>
+        <p><strong>Bekleyen Ödemeler:</strong> {{totalPending}} ₺</p>
+
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Miktar</th>
+              <th>Ay/Yıl</th>
+              <th>Tarih</th>
+              <th>Durum</th>
+              <th>Not</th>
+              <th>Makbuz</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each payments}}
+            <tr>
+              <td>{{this.amount}} ₺</td>
+              <td>{{this.month}}/{{this.year}}</td>
+              <td>{{formatDate this.date}}</td>
+
+              <td>
+                {{#if (eq this.status "ödendi")}}
+                  <span class="badge bg-success">Ödendi</span>
+                {{else}}
+                  <span class="badge bg-warning text-dark">Bekliyor</span>
+                {{/if}}
+              </td>
+
+              <td>{{this.note}}</td>
+
+              <td>
+                {{#if this.receiptFile}}
+                  <a href="/receipts/{{this.receiptFile}}" target="_blank">📄</a>
+                {{else}}
+                  -
+                {{/if}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <h5 class="mt-2 mb-3">📊 Yoklama İstatistiği</h5>
+    <canvas id="studentAttendanceChart" height="100"></canvas>
+
+    <!-- Yoklama Geçmişi -->
+    <div class="card mb-4">
+      <div class="card-header fw-bold">Yoklama Geçmişi</div>
+      <div class="card-body">
+
+        <p><strong>Toplam Var:</strong> {{attendancePresent}}</p>
+        <p><strong>Toplam Yok:</strong> {{attendanceAbsent}}</p>
+
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Tarih</th>
+              <th>Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each attendance}}
+            <tr>
+              <td>{{formatDate this.date}}</td>
+              <td>
+                {{#if (eq this.status "var")}}
+                  <span class="text-success fw-bold">VAR</span>
+                {{else}}
+                  <span class="text-danger fw-bold">YOK</span>
+                {{/if}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<a href="/admin/students" class="btn btn-secondary">Geri Dön</a>
+<a href="/admin/students/{{student._id}}/edit" class="btn btn-primary ms-2">Düzenle</a>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  new Chart(document.getElementById("studentAttendanceChart"), {
+    type: "pie",
+    data: {
+      labels: ["VAR", "YOK"],
+      datasets: [{
+        data: [{{attendancePresent}}, {{attendanceAbsent}}],
+        backgroundColor: ["#28a745", "#dc3545"]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom" }
+      }
+    }
+  });
+</script>

@@ -1,0 +1,87 @@
+<h1 class="mb-4">📦 Veri Yönetimi (Import / Export)</h1>
+
+<div class="row">
+
+  <!-- EXPORT -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header fw-bold">📤 Dışa Aktar</div>
+      <div class="card-body">
+
+        <h5>Öğrenciler</h5>
+        <a href="/admin/students/export/excel" class="btn btn-primary mb-3">📥 Excel İndir</a>
+
+        <hr>
+
+        <h5>Ödemeler</h5>
+        <a href="/admin/payments/export/excel" class="btn btn-primary mb-2">📥 Tüm Ödemeler (Excel)</a>
+
+        <form method="GET" action="/admin/payments/export/monthly" class="row g-2 mb-3">
+          <div class="col-md-4">
+            <select name="month" class="form-select">
+              {{#each (range 1 12)}}
+                <option value="{{this}}">{{monthName this}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <input type="number" name="year" class="form-control" value="{{year}}">
+          </div>
+
+          <div class="col-md-4">
+            <button class="btn btn-secondary w-100">📥 Aylık İndir</button>
+          </div>
+        </form>
+
+        <hr>
+
+        <h5>Yoklama</h5>
+        <a href="/admin/attendance/export/excel" class="btn btn-primary mb-2">📥 Yoklama Excel</a>
+        <a href="/admin/attendance/export/pdf" class="btn btn-secondary mb-2">📄 Yoklama PDF</a>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- IMPORT -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header fw-bold">📥 İçe Aktar</div>
+      <div class="card-body">
+
+        <!-- Öğrenci Import -->
+        <h5>Öğrenciler</h5>
+        <a href="/samples/students_example.xlsx" class="btn btn-outline-secondary btn-sm mb-2">📘 Örnek Excel İndir</a>
+        
+        <form action="/admin/import/students" method="POST" enctype="multipart/form-data" class="mb-3">
+          <input type="file" name="file" accept=".xlsx" class="form-control mb-2" required>
+          <button class="btn btn-success">📤 İçeri Aktar</button>
+        </form>
+
+        <hr>
+
+        <!-- Ödemeler Import -->
+        <h5>Ödemeler</h5>
+        <a href="/samples/payments_example.xlsx" class="btn btn-outline-secondary btn-sm mb-2">📘 Örnek Excel İndir</a>
+        <form action="/admin/import/payments" method="POST" enctype="multipart/form-data" class="mb-3">
+          <input type="file" name="file" accept=".xlsx" class="form-control mb-2" required>
+          <button class="btn btn-success">📤 İçeri Aktar</button>
+        </form>
+
+        <hr>
+
+        <!-- Yoklama Import -->
+        <h5>Yoklama</h5>
+        <a href="/samples/attendance_example.xlsx" class="btn btn-outline-secondary btn-sm mb-2">📘 Örnek Excel İndir</a>
+        <form action="/admin/import/attendance" method="POST" enctype="multipart/form-data" class="mb-3">
+          <input type="file" name="file" accept=".xlsx" class="form-control mb-2" required>
+          <button class="btn btn-success">📤 İçeri Aktar</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,48 @@
+<h1 class="mb-4">📥 Veri İçe Aktar (Excel)</h1>
+
+<div class="card">
+  <div class="card-header fw-bold">Excel Yükle</div>
+
+  <div class="card-body">
+    <form method="POST" action="/admin/import" enctype="multipart/form-data">
+
+      <div class="mb-3">
+        <label class="form-label">Excel Dosyası (XLSX)</label>
+        <input type="file" name="excelFile" class="form-control" required>
+      </div>
+
+      <button class="btn btn-primary">Yükle & İçe Aktar</button>
+    </form>
+
+    <hr>
+
+    <h5>📌 Desteklenen Format</h5>
+    <pre>
+type: "student" | "payment" | "attendance"
+
+Örnek satırlar:
+
+1) Öğrenci:
+type: student
+name: Ali Veli
+branch: Futbol
+phone: 0530...
+monthlyFee: 400
+
+2) Ödeme:
+type: payment
+studentId: (öğrencinin mongo id)
+amount: 300
+month: 3
+year: 2025
+status: ödendi
+
+3) Yoklama:
+type: attendance
+studentId: (öğrencinin mongo id)
+status: var
+date: 2025-02-10
+    </pre>
+
+  </div>
+</div>

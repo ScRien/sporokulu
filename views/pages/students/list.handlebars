@@ -1,0 +1,45 @@
+<h1 class="mb-4">Öğrenciler</h1>
+
+<a href="/admin/students/new" class="btn btn-success mb-3">+ Yeni Öğrenci</a>
+
+<table class="table table-bordered table-hover align-middle">
+  <thead>
+    <tr>
+      <th>Ad Soyad</th>
+      <th>Branş</th>
+      <th>Seviye</th>
+      <th>Durum</th>
+      <th>Telefon</th>
+      <th>İşlem</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each students}}
+    <tr>
+      <td>{{this.name}}</td>
+      <td>{{this.branch}}</td>
+      <td>{{this.level}}</td>
+
+      <td>
+        {{#if (eq this.status "aktif")}}
+          <span class="badge bg-success">Aktif</span>
+        {{else}}
+          <span class="badge bg-secondary">Pasif</span>
+        {{/if}}
+      </td>
+
+      <td>{{this.phone}}</td>
+
+      <td>
+        <a href="/admin/students/{{this._id}}" class="btn btn-sm btn-primary">Profil</a>
+        <a href="/admin/students/{{this._id}}/edit" class="btn btn-sm btn-warning">Düzenle</a>
+
+        <form method="POST" action="/admin/students/{{this._id}}/delete" style="display:inline-block;">
+          <button class="btn btn-sm btn-danger" onclick="return confirm('Öğrenci silinsin mi?')">Sil</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

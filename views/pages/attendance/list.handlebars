@@ -1,0 +1,40 @@
+<h1 class="mb-4">Yoklama Listesi</h1>
+
+<a href="/admin/attendance" class="btn btn-primary mb-3">+ Günlük Yoklama Al</a>
+<a href="/admin/attendance/bulk" class="btn btn-success mb-3">+ Toplu Yoklama</a>
+<a href="/admin/attendance/new" class="btn btn-warning mb-3">+ Tek Öğrenci Yoklama</a>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Öğrenci</th>
+      <th>Tarih</th>
+      <th>Durum</th>
+      <th>İşlem</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each attendance}}
+    <tr>
+      <td>{{this.student.name}}</td>
+      <td>{{formatDate this.date}}</td>
+      <td>
+        {{#if (eq this.status "var")}}
+          <span class="text-success fw-bold">VAR</span>
+        {{else}}
+          <span class="text-danger fw-bold">YOK</span>
+        {{/if}}
+      </td>
+      <td>
+        <form method="POST" action="/admin/attendance/{{this._id}}/toggle" style="display:inline;">
+          <button class="btn btn-sm btn-info">Değiştir</button>
+        </form>
+
+        <form method="POST" action="/admin/attendance/{{this._id}}/delete" style="display:inline;">
+          <button class="btn btn-sm btn-danger">Sil</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

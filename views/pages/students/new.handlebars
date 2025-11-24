@@ -1,0 +1,136 @@
+<h1 class="mb-4">Yeni Öğrenci Ekle</h1>
+
+{{#if error}}
+<div class="alert alert-danger">{{error}}</div>
+{{/if}}
+
+<form method="POST" action="/admin/students">
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Temel Bilgiler</h5>
+      <div class="mb-3">
+        <label class="form-label">Ad Soyad</label>
+        <input type="text" name="name" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Yaş</label>
+        <input type="number" name="age" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Cinsiyet</label>
+        <select name="gender" class="form-select">
+          <option value="Erkek">Erkek</option>
+          <option value="Kız">Kız</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Doğum Tarihi</label>
+        <input type="date" name="birthDate" class="form-control" />
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h5>İletişim</h5>
+
+      <div class="mb-3">
+        <label class="form-label">Telefon</label>
+        <input type="text" name="phone" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Adres</label>
+        <input type="text" name="address" class="form-control" />
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">İl</label>
+          <input type="text" name="city" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">İlçe</label>
+          <input type="text" name="district" class="form-control" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <h5>Veli Bilgileri</h5>
+
+  <div class="row">
+    <div class="col-md-4">
+      <h6>Anne</h6>
+      <input type="text" name="mother.name" placeholder="Ad Soyad" class="form-control mb-2" />
+      <input type="text" name="mother.phone" placeholder="Telefon" class="form-control mb-2" />
+      <input type="email" name="mother.email" placeholder="E-mail" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+      <h6>Baba</h6>
+      <input type="text" name="father.name" placeholder="Ad Soyad" class="form-control mb-2" />
+      <input type="text" name="father.phone" placeholder="Telefon" class="form-control mb-2" />
+      <input type="email" name="father.email" placeholder="E-mail" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+      <h6>İkincil Veli</h6>
+      <input type="text" name="guardian.name" placeholder="Ad Soyad" class="form-control mb-2" />
+      <input type="text" name="guardian.phone" placeholder="Telefon" class="form-control mb-2" />
+      <input type="text" name="guardian.relation" placeholder="Yakınlık (Teyze vb.)" class="form-control" />
+    </div>
+  </div>
+
+  <hr>
+
+  <h5>Spor Bilgileri</h5>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Branş</label>
+      <select name="branch" class="form-select" required>
+        <option value="Futbol">Futbol</option>
+        <option value="Basketbol">Basketbol</option>
+        <option value="Yüzme">Yüzme</option>
+        <option value="Voleybol">Voleybol</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Seviye</label>
+      <select name="level" class="form-select">
+        <option value="Başlangıç">Başlangıç</option>
+        <option value="Orta">Orta</option>
+        <option value="İleri">İleri</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Durum</label>
+      <select name="status" class="form-select">
+        <option value="aktif">Aktif</option>
+        <option value="pasif">Pasif</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Aylık Ücret</label>
+    <input type="number" name="monthlyFee" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Notlar</label>
+    <textarea name="notes" class="form-control"></textarea>
+  </div>
+
+  <button class="btn btn-success w-100">Kaydet</button>
+
+</form>

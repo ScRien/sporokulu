@@ -1,0 +1,54 @@
+<h1 class="mb-4">Ödeme Detayı</h1>
+
+<div class="card mb-4">
+  <div class="card-header fw-bold">Ödeme Bilgileri</div>
+
+  <div class="card-body">
+
+    <p><strong>Öğrenci:</strong> {{student.name}}</p>
+    <p><strong>Branş:</strong> {{student.branch}}</p>
+    <p><strong>Ay / Yıl:</strong> {{payment.month}} / {{payment.year}}</p>
+    <p><strong>Tutar:</strong> {{payment.amount}} ₺</p>
+
+    <p>
+      <strong>Durum:</strong>
+      {{#if (eq payment.status "ödendi")}}
+        <span class="badge bg-success">Ödendi</span>
+      {{else}}
+        <span class="badge bg-warning text-dark">Bekliyor</span>
+      {{/if}}
+    </p>
+
+    <p><strong>Tarih:</strong> {{formatDate payment.date}}</p>
+
+    {{#if payment.note}}
+      <p><strong>Not:</strong> {{payment.note}}</p>
+    {{/if}}
+
+    {{#if payment.receiptFile}}
+      <p>
+        <strong>Makbuz:</strong>
+        <a href="/receipts/{{payment.receiptFile}}" target="_blank">PDF İndir</a>
+      </p>
+    {{/if}}
+  </div>
+</div>
+
+
+<!-- İşlemler -->
+<div class="d-flex gap-3">
+
+  <!-- Ödenmiş İşaretle -->
+  <form method="POST" action="/admin/payments/{{payment._id}}/mark-paid">
+    <button class="btn btn-success">
+      ✔ Ödenmiş İşaretle
+    </button>
+  </form>
+
+  <!-- Sil -->
+  <form method="POST" action="/admin/payments/{{payment._id}}/delete">
+    <button class="btn btn-danger">🗑 Sil</button>
+  </form>
+
+  <a href="/admin/payments" class="btn btn-secondary">Geri Dön</a>
+</div>

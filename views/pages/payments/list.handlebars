@@ -1,0 +1,52 @@
+<h1 class="mb-4">{{filterTitle}}</h1>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Öğrenci</th>
+      <th>Miktar</th>
+      <th>Tarih</th>
+      <th>Ay/Yıl</th>
+      <th>Durum</th>
+      <th>Makbuz</th>
+      <th>Not</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each payments}}
+      <tr>
+        <td>{{this.student.name}}</td>
+        <td>
+          <a href="/admin/payments/{{this._id}}">
+            {{this.amount}}
+            ₺
+          </a>
+        </td>
+        <td>{{formatDate this.date}}</td>
+        <td>{{this.month}} / {{this.year}}</td>
+        <td>
+          {{#if (eq this.status "ödendi")}}
+            <span class="badge bg-success">Ödendi</span>
+          {{else}}
+            <span class="badge bg-warning text-dark">Bekliyor</span>
+          {{/if}}
+        </td>
+        <td>
+          {{#if this.receiptFile}}
+            <a
+              class="btn btn-sm btn-outline-primary"
+              href="/receipts/{{this.receiptFile}}"
+              target="_blank"
+            >
+              İndir
+            </a>
+          {{else}}
+            -
+          {{/if}}
+        </td>
+        <td>{{this.note}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
